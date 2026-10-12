@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Activity 1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --page-bg: #121212;
+        --glass: rgba(255, 255, 255, .06);
+        --glass-border: rgba(255, 255, 255, .12);
+        --text: #f2f2f2;
+        --muted: #8a8a8a;
+      }
+
+      .youtube   { --color: #ff4d4d; --tint: 255, 77, 77; }
+      .tiktok    { --color: #3ddbd0; --tint: 61, 219, 208; }
+      .instagram { --color: #e0457b; --tint: 224, 69, 123; }
+
+
+      body {
+        background: var(--page-bg);
+        color: var(--text);
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        padding-bottom: 2.5rem;
+      }
+
+      .page-title {
+        text-align: center;
+        font-weight: 700;
+        letter-spacing: .02em;
+        margin-top: 1.5rem;
+      }
+
+
+      .tile {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 200px;
+        padding: 1.1rem 1.25rem;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .12);
+        backdrop-filter: blur(18px) saturate(150%);
+        -webkit-backdrop-filter: blur(18px) saturate(150%);
+      }
+
+      .tile.tall {
+        justify-content: flex-start;
+      }
+
+      .tile.compact {
+        min-height: 100px;
+      }
+
+
+      .caption {
+        color: var(--muted);
+        font-size: .85rem;
+        font-weight: 500;
+      }
+
+      .number {
+        font-size: 1.25rem;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      .number.big { font-size: 2.4rem; }
+
+
+      .stat-row {
+        display: flex;
+        align-items: center;
+        gap: .9rem;
+      }
+
+      .icon-bubble {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .08);
+      }
+
+      .icon-bubble img { width: 22px; height: 22px; }
+
+
+      .bar {
+        height: 8px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, .08);
+        overflow: hidden;
+      }
+
+      .bar-fill {
+        height: 100%;
+        border-radius: 99px;
+        background: var(--color, var(--text));
+      }
+
+
+      .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .75rem;
+      }
+
+      .chart-heading {
+        font-size: 2.2rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .chart-heading span {
+        color: var(--muted);
+        font-weight: 500;
+      }
+
+      .tab-row {
+        display: flex;
+        gap: .25rem;
+      }
+
+      .tab-group {
+        display: flex;
+        gap: .15rem;
+        padding: .2rem;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, .05);
+      }
+
+      .tab {
+        padding: .4rem .8rem;
+        border: 0;
+        border-radius: 9px;
+        background: transparent;
+        color: var(--muted);
+        font: inherit;
+        font-size: .8rem;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .tab:hover { color: var(--text); }
+      .tab.active { background: rgba(255, 255, 255, .12); color: var(--text); }
+      .tab:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+
+      #chart {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin-top: 1rem;
+      }
+
+      #chart text {
+        fill: var(--muted);
+        font-size: 10px;
+        font-family: inherit;
+      }
+
+      #chart .date-pill-text {
+        fill: var(--text);
+        font-weight: 600;
+      }
+
+
+      .share-row + .share-row { margin-top: 1.1rem; }
+
+      .share-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: .4rem;
+        font-size: .85rem;
+      }
+
+      .share-labels span:last-child { color: var(--muted); }
+
+
+      .platform {
+        gap: 1rem;
+        background:
+          linear-gradient(135deg, rgba(var(--tint), .22), rgba(var(--tint), .03) 70%),
+          var(--glass);
+      }
+
+      .platform-name {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        font-weight: 600;
+      }
+
+      .logo {
+        width: 36px;
+        height: 36px;
+        padding: 8px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, .08);
+      }
+
+      .clips {
+        color: var(--muted);
+        font-size: .85rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1 class="page-title">WHOP ANALYTICS BENTO</h1>
+
+    <div class="container-fluid mt-4">
+
+      <div class="row">
+        <div class="col-12 md:col-4 mb-4 md:mb-0">
+          <div class="tile h-100">
+            <div class="caption">Average views per clip</div>
+            <div class="number big">1.9K</div>
+            <div class="caption mt-1">193 clips tracked</div>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-3 mb-4 md:mb-0">
+          <div class="tile h-100">
+            <div class="caption">Earned per 1K views</div>
+            <div class="number big">$1.25</div>
+            <div class="caption mt-1">$458.49 total</div>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-5">
+          <div class="tile h-100">
+            <div class="d-flex flex-wrap gap-2 justify-content-between align-items-end mb-3">
+              <div>
+                <div class="caption">Approval rate</div>
+                <div class="number big">23.2%</div>
+              </div>
+              <div class="caption">55 of 237 submissions</div>
+            </div>
+            <div class="bar"><div class="bar-fill" style="width: 23.2%;"></div></div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row mt-4">
+
+        <div class="col-12 xl:col-4 mb-4 xl:mb-0 d-flex flex-column">
+          <div class="row flex-fill">
+            <div class="col-6">
+              <div class="tile compact h-100">
+                <div class="stat-row flex-wrap">
+                  <div class="icon-bubble"><img src="/002/assets/eye.svg" alt=""></div>
+                  <div><div class="number">367.3K</div><div class="caption">Views</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="tile compact h-100">
+                <div class="stat-row flex-wrap">
+                  <div class="icon-bubble"><img src="/002/assets/circle-dollar-sign.svg" alt=""></div>
+                  <div><div class="number">$458.49</div><div class="caption">Earned</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row flex-fill mt-4">
+            <div class="col-6">
+              <div class="tile compact h-100">
+                <div class="stat-row flex-wrap">
+                  <div class="icon-bubble"><img src="/002/assets/film.svg" alt=""></div>
+                  <div><div class="number">237</div><div class="caption">Submissions</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="tile compact h-100">
+                <div class="stat-row flex-wrap">
+                  <div class="icon-bubble"><img src="/002/assets/circle-check.svg" alt=""></div>
+                  <div><div class="number">55</div><div class="caption">Approved</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 xl:col-6 mb-4 xl:mb-0">
+          <div class="tile tall h-100">
+            <div class="chart-header">
+              <div class="chart-heading"><b id="chart-number">367.3K</b> <span id="chart-name">Views</span></div>
+
+              <div class="tab-row flex-wrap">
+                <div class="tab-group flex-wrap" data-setting="metric">
+                  <button class="tab active" type="button" data-option="views">Views</button>
+                  <button class="tab" type="button" data-option="likes">Likes</button>
+                  <button class="tab" type="button" data-option="comments">Comments</button>
+                  <button class="tab" type="button" data-option="shares">Shares</button>
+                </div>
+                <div class="tab-group flex-wrap" data-setting="mode">
+                  <button class="tab active" type="button" data-option="cumulative">Cumulative</button>
+                  <button class="tab" type="button" data-option="daily">Daily</button>
+                </div>
+              </div>
+            </div>
+
+            <svg id="chart" viewBox="0 0 600 270" role="img" aria-label="Views over time"></svg>
+          </div>
+        </div>
+
+        <div class="col-12 xl:col-2">
+          <div class="tile tall h-100">
+            <div class="caption mb-3">Share of views</div>
+
+            <div class="share-row">
+              <div class="share-labels"><span>YouTube</span><span>78.8%</span></div>
+              <div class="bar"><div class="bar-fill youtube" style="width: 78.8%;"></div></div>
+            </div>
+            <div class="share-row">
+              <div class="share-labels"><span>TikTok</span><span>13.4%</span></div>
+              <div class="bar"><div class="bar-fill tiktok" style="width: 13.4%;"></div></div>
+            </div>
+            <div class="share-row">
+              <div class="share-labels"><span>Instagram</span><span>7.8%</span></div>
+              <div class="bar"><div class="bar-fill instagram" style="width: 7.8%;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row mt-4">
+        <div class="col-12 md:col-4 mb-4 md:mb-0">
+          <div class="tile platform youtube h-100">
+            <div class="platform-name"><img class="logo" src="/002/assets/youtube.svg" alt="">YouTube</div>
+            <div><div class="number big">289.6K</div><div class="clips">101 clips</div></div>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-4 mb-4 md:mb-0">
+          <div class="tile platform tiktok h-100">
+            <div class="platform-name"><img class="logo" src="/002/assets/tiktok.svg" alt="">TikTok</div>
+            <div><div class="number big">49.2K</div><div class="clips">49 clips</div></div>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-4">
+          <div class="tile platform instagram h-100">
+            <div class="platform-name"><img class="logo" src="/002/assets/instagram.svg" alt="">Instagram</div>
+            <div><div class="number big">28.5K</div><div class="clips">43 clips</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <script>
+      const DATA = {
+        views: {
+          name: 'Views', total: '367.3K', unit: 'K', axisMax: 400, axisStep: 100,
+          points: [[0,0],[2,3],[5,8],[8,10],[9,12],[9.6,46],[11,50],[13,54],[16,60],[19,66],[20,70],[20.6,88],[22,92],[24,96],[24.5,125],[26,138],[29,148],[33,170],[37,187],[40,200],[43,210],[48,214],[52,226],[55,228],[59,235],[60,242],[62,310],[66,312],[71,316],[72,330],[73.5,345],[78,352],[82,358],[86,362],[90,367.3]],
+        },
+        likes: {
+          name: 'Likes', total: '5.9K', unit: 'K', axisMax: 6, axisStep: 1,
+          points: [[0,0],[8,.08],[18,.3],[25,.4],[30,.6],[36,.8],[40,.95],[45,1.08],[50,1.1],[52,1.3],[55,1.5],[57,1.6],[58.6,2.1],[60,2.3],[61.5,2.6],[62.5,3.4],[64,3.8],[66,3.9],[70,4.1],[71,4.3],[72.5,5],[75,5.25],[78,5.4],[80,5.6],[84,5.75],[88,5.85],[90,5.9]],
+        },
+        comments: {
+          name: 'Comments', total: '178', unit: '', axisMax: 200, axisStep: 50,
+          points: [[0,0],[1,4],[6,10],[10,11],[13,15],[17,22],[21,30],[23,38],[25,50],[27,57],[30,62],[33,68],[36,70],[38,85],[40,98],[42,103],[49,103],[51,108],[57,110],[58.5,122],[61,127],[63,140],[64,150],[74,152],[75.5,158],[78,160],[82,160],[84,170],[85.5,175],[88,176],[90,178]],
+        },
+        shares: {
+          name: 'Shares', total: '66', unit: '', axisMax: 80, axisStep: 20,
+          points: [[0,0],[38,0],[39.5,1],[48,1],[49,3],[52,3],[53.5,5],[56,5],[57.5,9],[59.5,12],[61,13],[62,25],[71,25],[72.5,31],[75,41],[77,41],[78.5,44],[80,46],[81.5,52],[83.5,52],[84.5,55],[86,56],[87.5,66],[90,66]],
+        },
+      };
+
+      const TOTAL_DAYS = 90;
+      const DATE_LABELS = [[0, 'Jul 14'], [18, 'Aug 1'], [36, 'Aug 19'], [54, 'Sep 6'], [72, 'Sep 24']];
+      const CHART_COLOR = '#f2f2f2';
+
+      const chart = document.getElementById('chart');
+      const chartNumber = document.getElementById('chart-number');
+      const chartName = document.getElementById('chart-name');
+
+      const current = { metric: 'views', mode: 'cumulative' };
+
+      let WIDTH = 600;
+      let HEIGHT = 270;
+      const MARGIN = { left: 38, right: 28, top: 10, bottom: 28 };
+
+
+      function fitChartToTile() {
+        WIDTH = Math.max(chart.clientWidth, 280);
+        HEIGHT = Math.min(Math.max(Math.round(WIDTH * 0.4), 160), 260);
+        chart.setAttribute('viewBox', `0 0 ${WIDTH} ${HEIGHT}`);
+      }
+
+      function xPos(day) {
+        return MARGIN.left + (day / TOTAL_DAYS) * (WIDTH - MARGIN.left - MARGIN.right);
+      }
+
+      function valueOnDay(points, day) {
+        for (let i = 1; i < points.length; i++) {
+          if (day <= points[i][0]) {
+            const [day1, value1] = points[i - 1];
+            const [day2, value2] = points[i];
+            return value1 + (value2 - value1) * ((day - day1) / (day2 - day1));
+          }
+        }
+        return points[points.length - 1][1];
+      }
+
+      function roundedAxis(largestValue) {
+        const rough = largestValue / 4;
+        const size = 10 ** Math.floor(Math.log10(rough));
+        const axisStep = [1, 2, 2.5, 5, 10].map(n => n * size).find(s => s >= rough);
+        return { axisMax: axisStep * 4, axisStep };
+      }
+
+      function formatTick(value, unit) {
+        return value === 0 ? '0' : `${+value.toFixed(2)}${unit}`;
+      }
+
+
+      function drawChart() {
+        const metric = DATA[current.metric];
+        const isDaily = current.mode === 'daily';
+
+        const runningTotal = Array.from({ length: TOTAL_DAYS + 1 }, (_, day) => valueOnDay(metric.points, day));
+        const perDay = runningTotal.map((value, day) => (day === 0 ? 0 : value - runningTotal[day - 1]));
+
+        const values = isDaily ? perDay : runningTotal;
+        const { axisMax, axisStep } = isDaily ? roundedAxis(Math.max(...perDay)) : metric;
+
+        const yPos = value => MARGIN.top + (1 - value / axisMax) * (HEIGHT - MARGIN.top - MARGIN.bottom);
+        const bottom = yPos(0);
+
+        let html = `
+          <defs>
+            <linearGradient id="area-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="${CHART_COLOR}" stop-opacity=".2"/>
+              <stop offset="1" stop-color="${CHART_COLOR}" stop-opacity="0"/>
+            </linearGradient>
+          </defs>`;
+
+        for (let value = 0; value <= axisMax + 1e-9; value += axisStep) {
+          const y = yPos(value);
+          html += `<line x1="${MARGIN.left}" x2="${WIDTH - MARGIN.right}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.06)"/>`;
+          html += `<text x="${MARGIN.left - 6}" y="${y + 3}" text-anchor="end">${formatTick(value, metric.unit)}</text>`;
+        }
+
+        DATE_LABELS.forEach(([day, label]) => {
+          html += `<text x="${xPos(day)}" y="${HEIGHT - 8}" text-anchor="middle">${label}</text>`;
+        });
+
+        if (isDaily) {
+          const barWidth = ((WIDTH - MARGIN.left - MARGIN.right) / (TOTAL_DAYS + 1)) * 0.7;
+          for (let day = 1; day <= TOTAL_DAYS; day++) {
+            html += `<rect x="${xPos(day) - barWidth / 2}" y="${yPos(values[day])}" width="${barWidth}" height="${bottom - yPos(values[day])}" rx="1.5" fill="${CHART_COLOR}"/>`;
+          }
+        } else {
+          const line = values.map((value, day) => `${day ? 'L' : 'M'}${xPos(day).toFixed(1)},${yPos(value).toFixed(1)}`).join(' ');
+          html += `<path d="${line} L${xPos(TOTAL_DAYS)},${bottom} L${xPos(0)},${bottom} Z" fill="url(#area-fill)"/>`;
+          html += `<path d="${line}" fill="none" stroke="${CHART_COLOR}" stroke-width="2" stroke-linejoin="round"/>`;
+        }
+
+        html += `<line x1="${xPos(TOTAL_DAYS)}" x2="${xPos(TOTAL_DAYS)}" y1="${MARGIN.top}" y2="${bottom}" stroke="rgba(255,255,255,.25)"/>`;
+        html += `<rect x="${xPos(TOTAL_DAYS) - 24}" y="${HEIGHT - 22}" width="48" height="18" rx="9" fill="rgba(255,255,255,.12)"/>`;
+        html += `<text class="date-pill-text" x="${xPos(TOTAL_DAYS)}" y="${HEIGHT - 9}" text-anchor="middle">Oct 12</text>`;
+
+        chart.innerHTML = html;
+        chart.setAttribute('aria-label', `${metric.name} over time, Jul 14 to Oct 12 (${current.mode})`);
+        chartNumber.textContent = metric.total;
+        chartName.textContent = metric.name;
+      }
+
+
+      document.querySelectorAll('.tab-group').forEach(group => {
+        group.addEventListener('click', event => {
+          const clickedTab = event.target.closest('.tab');
+          if (!clickedTab) return;
+
+          group.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab === clickedTab));
+          current[group.dataset.setting] = clickedTab.dataset.option;
+          drawChart();
+        });
+      });
+
+      window.addEventListener('resize', () => {
+        fitChartToTile();
+        drawChart();
+      });
+
+      fitChartToTile();
+      drawChart();
+    </script>
+
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
+  </body>
+</html>
