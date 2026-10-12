@@ -218,7 +218,7 @@
     <div class="container-fluid mt-4">
 
       <div class="row">
-        <div class="col-4">
+        <div class="col-6 md:col-4 mb-4 md:mb-0">
           <div class="tile h-100">
             <div class="caption">Average views per clip</div>
             <div class="number big">1.9K</div>
@@ -226,7 +226,7 @@
           </div>
         </div>
 
-        <div class="col-3">
+        <div class="col-6 md:col-3 mb-4 md:mb-0">
           <div class="tile h-100">
             <div class="caption">Earned per 1K views</div>
             <div class="number big">$1.25</div>
@@ -234,9 +234,9 @@
           </div>
         </div>
 
-        <div class="col-5">
+        <div class="col-12 md:col-5">
           <div class="tile h-100">
-            <div class="d-flex justify-content-between align-items-end mb-3">
+            <div class="d-flex flex-wrap gap-2 justify-content-between align-items-end mb-3">
               <div>
                 <div class="caption">Approval rate</div>
                 <div class="number big">23.2%</div>
@@ -251,38 +251,35 @@
 
       <div class="row mt-4">
 
-        <div class="col-4">
-          <div class="row">
-            <div class="col-6">
+        <div class="col-12 xl:col-4 mb-4 xl:mb-0">
+          <div class="row gy-4">
+            <div class="col-6 md:col-3 xl:col-6">
               <div class="tile h-100">
-                <div class="stat-row">
+                <div class="stat-row flex-wrap">
                   <div class="icon-bubble"><img src="/002/assets/eye.svg" alt=""></div>
                   <div><div class="number">367.3K</div><div class="caption">Views</div></div>
                 </div>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-6 md:col-3 xl:col-6">
               <div class="tile h-100">
-                <div class="stat-row">
+                <div class="stat-row flex-wrap">
                   <div class="icon-bubble"><img src="/002/assets/circle-dollar-sign.svg" alt=""></div>
                   <div><div class="number">$458.49</div><div class="caption">Earned</div></div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="row mt-4">
-            <div class="col-6">
+            <div class="col-6 md:col-3 xl:col-6">
               <div class="tile h-100">
-                <div class="stat-row">
+                <div class="stat-row flex-wrap">
                   <div class="icon-bubble"><img src="/002/assets/film.svg" alt=""></div>
                   <div><div class="number">237</div><div class="caption">Submissions</div></div>
                 </div>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-6 md:col-3 xl:col-6">
               <div class="tile h-100">
-                <div class="stat-row">
+                <div class="stat-row flex-wrap">
                   <div class="icon-bubble"><img src="/002/assets/circle-check.svg" alt=""></div>
                   <div><div class="number">55</div><div class="caption">Approved</div></div>
                 </div>
@@ -291,19 +288,19 @@
           </div>
         </div>
 
-        <div class="col-6">
+        <div class="col-12 md:col-8 xl:col-6 mb-4 md:mb-0">
           <div class="tile tall h-100">
             <div class="chart-header">
               <div class="chart-heading"><b id="chart-number">367.3K</b> <span id="chart-name">Views</span></div>
 
-              <div class="tab-row">
-                <div class="tab-group" data-setting="metric">
+              <div class="tab-row flex-wrap">
+                <div class="tab-group flex-wrap" data-setting="metric">
                   <button class="tab active" type="button" data-option="views">Views</button>
                   <button class="tab" type="button" data-option="likes">Likes</button>
                   <button class="tab" type="button" data-option="comments">Comments</button>
                   <button class="tab" type="button" data-option="shares">Shares</button>
                 </div>
-                <div class="tab-group" data-setting="mode">
+                <div class="tab-group flex-wrap" data-setting="mode">
                   <button class="tab active" type="button" data-option="cumulative">Cumulative</button>
                   <button class="tab" type="button" data-option="daily">Daily</button>
                 </div>
@@ -314,7 +311,7 @@
           </div>
         </div>
 
-        <div class="col-2">
+        <div class="col-12 md:col-4 xl:col-2">
           <div class="tile tall h-100">
             <div class="caption mb-3">Share of views</div>
 
@@ -336,21 +333,21 @@
 
 
       <div class="row mt-4">
-        <div class="col-4">
+        <div class="col-12 md:col-4 mb-4 md:mb-0">
           <div class="tile platform youtube h-100">
             <div class="platform-name"><img class="logo" src="/002/assets/youtube.svg" alt="">YouTube</div>
             <div><div class="number big">289.6K</div><div class="clips">101 clips</div></div>
           </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-6 md:col-4">
           <div class="tile platform tiktok h-100">
             <div class="platform-name"><img class="logo" src="/002/assets/tiktok.svg" alt="">TikTok</div>
             <div><div class="number big">49.2K</div><div class="clips">49 clips</div></div>
           </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-6 md:col-4">
           <div class="tile platform instagram h-100">
             <div class="platform-name"><img class="logo" src="/002/assets/instagram.svg" alt="">Instagram</div>
             <div><div class="number big">28.5K</div><div class="clips">43 clips</div></div>
@@ -391,10 +388,16 @@
 
       const current = { metric: 'views', mode: 'cumulative' };
 
-      const WIDTH = 600;
-      const HEIGHT = 270;
-      const MARGIN = { left: 38, right: 12, top: 10, bottom: 28 };
+      let WIDTH = 600;
+      let HEIGHT = 270;
+      const MARGIN = { left: 38, right: 28, top: 10, bottom: 28 };
 
+
+      function fitChartToTile() {
+        WIDTH = Math.min(600, Math.max(chart.clientWidth, 280));
+        HEIGHT = Math.round(WIDTH * 0.45);
+        chart.setAttribute('viewBox', `0 0 ${WIDTH} ${HEIGHT}`);
+      }
 
       function xPos(day) {
         return MARGIN.left + (day / TOTAL_DAYS) * (WIDTH - MARGIN.left - MARGIN.right);
@@ -487,6 +490,12 @@
         });
       });
 
+      window.addEventListener('resize', () => {
+        fitChartToTile();
+        drawChart();
+      });
+
+      fitChartToTile();
       drawChart();
     </script>
 
