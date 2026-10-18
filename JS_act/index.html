@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+    <style>
+        .page-title {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="container">
+        <div class="row" id="parent">
+        </div>
+      </div>
+    </div>
+
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous">  
+    </script>
+
+    <script>
+        var Pokemon = [
+            {
+                name: "Bulbasaur",
+                dex_num: "National No: 001",
+                type: ["Type: Grass", "Poison"],
+                abilities: ["Abilities: Overgrow", "Chlorophyll"],
+                image: "assets/images/bulbasaur.avif",
+                description: "Pokedex entries: For some time after its birth, it grows by taking nourishment from the seed on its back. ",
+            },
+            {
+                name: "Charmander",
+                dex_num: "National No: 004",
+                type: ["Type: Fire"],
+                abilities: ["Abilities: Blaze", "Solar Power"],
+                image: "assets/images/charmander.jpg",
+                description: "Pokedex entries: The fire on the tip of its tail is a measure of its life. If the Pokémon is healthy, its tail burns intensely.",
+            },
+            {
+                name: "Squirtle",
+                dex_num: "National No: 007",
+                type: ["Type: Water"],
+                abilities: ["Abilities: Torrent", "Rain Dish"],
+                image: "assets/images/squirtle.avif",
+                description: "Pokedex entries: It hides in its shell to protect itself, then strikes back with spouts of water at every opportunity. ",
+            },
+            {
+                name: "Pikachu",
+                dex_num: "National No: 025",
+                type: ["Type: Electric"],
+                abilities: ["Abilities: Static", "Lightning Rod"],
+                image: "assets/images/pikachu.avif",
+                description: "Pokedex entries: When several of these Pokémon gather, their electricity can build and cause lightning storms.  ",
+            }
+        ]
+
+        var elParent = document.getElementById("parent");
+        for (var i = 0; i < Pokemon.length; i++) {
+            elParent.innerHTML +=
+                `<div class="col">
+                <div class="card h-100 p-3 my-3 shadow rounded-4">
+                     <img src="${Pokemon[i].image}" alt="${Pokemon[i].name}"
+                     style="height: 250px; object-fit: contain; ">
+                  <div class="h4 text-center mt-5" id=>` + Pokemon[i].name +`</div>
+                  <div class="p-3" id=>` + Pokemon[i].dex_num +`</div>
+                  <div class="p-3" id=>` + Pokemon[i].type +`</div>
+                  <div class="p-3" id=>` + Pokemon[i].abilities +`</div>
+                  <div class="p-3" id=>` + Pokemon[i].description +`</div>
+                  <div class="mt-3">
+                  </div>
+                </div>
+              </div>`;
+        }
+    </script>
+  </body>
+</html>
