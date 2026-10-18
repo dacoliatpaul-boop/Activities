@@ -1,0 +1,39 @@
+<div>
+        <div class="container">
+            <div class="row">
+                <div class="col-4 auto">
+                    <div class="card p-3 my-3 shadow rounded-4 mb-5" style="width: 18rem; aspect-ratio: 1/1"> 
+                        <img  class="card-img-top" alt="charmander" src="assets/images/charmander.jpg" width="100%">
+                        <div class="h3">
+                            Charmander
+                        </div>
+                        <div class="mt-3">
+                            Fire type starter
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 auto">
+                    <div class="card p-3 my-3 shadow rounded-4 mb-5" style="width: 18rem; aspect-ratio: 1/1"> 
+                        <img  class="card-img-top" alt="charmander" src="assets/images/bulbasaur.avif" width="100%">
+                        <div class="h3">
+                            Bulbasaur
+                        </div>
+                        <div class="mt-3">
+                            Grass type starter
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 auto">
+                    <div class="card p-3 my-3 shadow rounded-4 mb-5" style="width: 18rem; aspect-ratio: 1/1"> 
+                        <img  class="card-img-top" alt="charmander" src="assets/images/squirtle.avif" width="100%">
+                        <div class="h3">
+                            Squirtle
+                        </div>
+                        <div class="mt-3">
+                            Water type starter
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
