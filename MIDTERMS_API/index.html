@@ -1,58 +1,213 @@
 <!doctype html>
-<html lang="en" data-bs-theme="light"></html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GUN LIBRARY</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
-  </head>
-  <body>
-<div>
-    <nav class="navbar navbar-light bg-light sticky-top shadow">
-        <div class="container">
-               <nav class="navbar-brand fw-bold"><img src="assets/GL.png" alt="" width="30" height="30">GUN LIBRARY</span>
-            <div class="row ">
-                <div class="col 6 ">
-                    <div class="flex-grow-1 mx-md-4" style="max-width: 520px;">
-                        <input type="search" id="searchInput" class="form-control rounded-pill" placeholder="Search Guns">
-                    </div>
-                </div>
-                
-                <div class="col 3">
-                    <select id="caliberSelect" class="form-select form-select-sm w-auto rounded-pill">
-                        <option value="">All calibers</option>
-                    </select>  
-                </div>
-                <div class="row 3">
-                    <select id="sortSelect" class="form-select form-select-sm w-auto rounded-pill">
-                        <option value="name">Sort: Name</option>
-                        <option value="rate">Sort: Fire rate</option>
-                        <option value="weight">Sort: Weight</option>
-                    </select>   
-                </div>
-            </div>
-        </div>
-    </nav>
-</div>
+<html lang="en" data-bs-theme="dark">
 
-  <header class="bg-dark text-white pb-4">
-    <div class="container pt-4">
-      <h1 class="h2 fw-bold mb-1">Browse weapons</h1>
-      <p class="text-white-50 mb-3">Live data from the Gray Zone Warfare API.</p>
-      <div class="d-flex flex-wrap gap-2" id="filters"></div>
-    </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GUN LIBRARY</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <header class="navbar bg-black border-bottom border-danger border-2 px-3">
+    <a href="index.html" class="brand navbar-brand fs-3 text-white">
+      <img src="assets/GL.png" alt="" height="30"> Gun Library
+    </a>
+    <a href="index.html" class="nav-link text-white">Home</a>
   </header>
 
-<div>
-    <div class ="container">
-        <div class="row">
-            
+  <main class="container">
+    <div class="row align-items-center g-3 mt-4">
+      <div class="col-lg-5">
+        <h1 class="display-4 fw-bold text-center">Welcome to Gun Library</h1>
+      </div>
+      <div class="col-lg-7">
+        <div class="d-flex flex-wrap gap-2">
+          <div class="input-group w-auto flex-grow-1">
+            <input type="text" class="form-control" placeholder="Search Gun..." id="searchInput" oninput="showGuns()">
+            <button type="button" class="btn btn-danger" onclick="showGuns()">Search</button>
+          </div>
+          <select class="form-select w-auto" id="typeInput" onchange="showGuns()">
+            <option value="">All types</option>
+          </select>
+          <select class="form-select w-auto" id="caliberInput" onchange="showGuns()">
+            <option value="">All calibers</option>
+          </select>
+          <select class="form-select w-auto" id="makerInput" onchange="showGuns()">
+            <option value="">All makers</option>
+          </select>
+          <select class="form-select w-auto" id="sortInput" onchange="showGuns()">
+            <option value="az">Name A–Z</option>
+            <option value="za">Name Z–A</option>
+          </select>
+          <button type="button" class="btn btn-outline-danger" onclick="resetGuns()">Reset</button>
         </div>
+      </div>
     </div>
-</div>
 
+    <p class="text-secondary mt-3" id="status"></p>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4 mb-5" id="parent"></div>
+  </main>
 
-    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+
+  <script>
+    var baseUrl = "https://gzw-data.dev";
+    var apiUrl = baseUrl + "/api/v1/weapons?all=true";
+
+    var elParent = document.getElementById("parent");
+    var elStatus = document.getElementById("status");
+    var inSearch = document.getElementById("searchInput");
+    var inType = document.getElementById("typeInput");
+    var inCaliber = document.getElementById("caliberInput");
+    var inMaker = document.getElementById("makerInput");
+    var inSort = document.getElementById("sortInput");
+
+    var guns = [];
+
+    function clean(str) {
+      var div = document.createElement("div");
+      div.textContent = str == null ? "" : str;
+      return div.innerHTML.replace(/"/g, "&quot;");
+    }
+
+    function getName(gun) {
+      return gun.name || gun.displayName || String(gun.id || "");
+    }
+
+    function getId(gun) {
+      return String(gun.id != null ? gun.id : getName(gun));
+    }
+
+    function getImage(gun) {
+      var url = gun.image || gun.icon || gun.imageUrl || "";
+      if (url.startsWith("/")) {
+        url = baseUrl + url;
+      }
+      return url;
+    }
+
+    function getType(gun) {
+      return gun.type || gun.category || gun.weaponType || "";
+    }
+
+    function getCaliber(gun) {
+      return gun.caliber || gun.ammo || gun.ammoType || "";
+    }
+
+    function getMaker(gun) {
+      return gun.manufacturer || "";
+    }
+
+    function fillSelect(el, values) {
+      var unique = [...new Set(values.filter(Boolean))].sort();
+      if (unique.length == 0) {
+        el.classList.add("d-none");
+        return;
+      }
+      for (var i = 0; i < unique.length; i++) {
+        el.innerHTML += "<option>" + clean(unique[i]) + "</option>";
+      }
+    }
+
+    const getGuns = async () => {
+      elStatus.innerHTML = "Loading...";
+
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          guns = data;
+        } else {
+          guns = Object.values(data).find(Array.isArray) || [];
+        }
+
+        fillSelect(inType, guns.map(getType));
+        fillSelect(inCaliber, guns.map(getCaliber));
+        fillSelect(inMaker, guns.map(getMaker));
+
+        showGuns();
+      } catch (err) {
+        elStatus.innerHTML = "Failed to load weapons: " + err.message;
+      }
+    }
+
+    function showGuns() {
+      var search = inSearch.value.trim().toLowerCase();
+
+      var list = guns.filter(function (gun) {
+        if (!getName(gun).toLowerCase().includes(search)) return false;
+        if (inType.value != "" && getType(gun) != inType.value) return false;
+        if (inCaliber.value != "" && getCaliber(gun) != inCaliber.value) return false;
+        if (inMaker.value != "" && getMaker(gun) != inMaker.value) return false;
+        return true;
+      });
+
+      list.sort(function (a, b) {
+        return getName(a).localeCompare(getName(b), undefined, { numeric: true });
+      });
+
+      if (inSort.value == "za") {
+        list.reverse();
+      }
+
+      if (list.length == 0) {
+        elStatus.innerHTML = "No guns found.";
+      } else {
+        elStatus.innerHTML = list.length + " result(s)";
+      }
+
+      elParent.innerHTML = "";
+
+      for (var i = 0; i < list.length; i++) {
+        var gun = list[i];
+        var name = clean(getName(gun));
+        var image = getImage(gun);
+
+        var tags = "";
+        var tagList = [getType(gun), getCaliber(gun), getMaker(gun)];
+        for (var j = 0; j < tagList.length; j++) {
+          if (tagList[j]) {
+            tags += '<span class="badge bg-danger fs-6 fw-medium me-1 mb-1">' + clean(tagList[j]) + '</span>';
+          }
+        }
+
+        var picture = '<div class="d-flex align-items-center justify-content-center text-secondary">No image</div>';
+        if (image) {
+          picture = '<img class="object-fit-contain p-4" src="' + clean(image) + '" alt="' + name + '" loading="lazy">';
+        }
+
+        elParent.innerHTML += `
+          <div class="col">
+            <a href="gun.html?id=` + encodeURIComponent(getId(gun)) + `" class="gun card h-100 text-decoration-none">
+              <div class="ratio ratio-4x3 bg-black border-bottom">` + picture + `</div>
+              <div class="card-body d-flex flex-column gap-3 p-4">
+                <h5 class="name card-title fs-3 mb-0">` + name + `</h5>
+                <div class="mt-auto">` + tags + `</div>
+              </div>
+            </a>
+          </div>
+        `;
+      }
+    }
+
+    function resetGuns() {
+      inSearch.value = "";
+      inType.value = "";
+      inCaliber.value = "";
+      inMaker.value = "";
+      inSort.value = "az";
+      showGuns();
+    }
+
+    getGuns();
+  </script>
+</body>
+
 </html>

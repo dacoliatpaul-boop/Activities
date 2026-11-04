@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GUN LIBRARY</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <header class="navbar bg-black border-bottom border-danger border-2 px-3">
+    <a href="index.html" class="brand navbar-brand fs-3 text-white">
+      <img src="assets/GL.png" alt="" height="30"> Gun Library
+    </a>
+    <a href="index.html" class="nav-link text-white">Home</a>
+  </header>
+
+  <main class="container">
+    <a href="index.html" class="btn btn-outline-danger my-4">← Back to all guns</a>
+    <p class="text-secondary" id="status"></p>
+    <div class="row g-4 mb-5" id="parent"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+
+  <script>
+    var baseUrl = "https://gzw-data.dev";
+    var apiUrl = baseUrl + "/api/v1/weapons?all=true";
+
+    var elParent = document.getElementById("parent");
+    var elStatus = document.getElementById("status");
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id');
+
+    var skip = ["id", "name", "displayName", "image", "icon", "imageUrl"];
+
+    function clean(str) {
+      var div = document.createElement("div");
+      div.textContent = str == null ? "" : str;
+      return div.innerHTML.replace(/"/g, "&quot;");
+    }
+
+    function getName(gun) {
+      return gun.name || gun.displayName || String(gun.id || "");
+    }
+
+    function getId(gun) {
+      return String(gun.id != null ? gun.id : getName(gun));
+    }
+
+    function getImage(gun) {
+      var url = gun.image || gun.icon || gun.imageUrl || "";
+      if (url.startsWith("/")) {
+        url = baseUrl + url;
+      }
+      return url;
+    }
+
+    function makeLabel(key) {
+      var text = key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_-]/g, " ");
+      return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
+    function isObject(value) {
+      return value != null && typeof value == "object" && !Array.isArray(value);
+    }
+
+    function makeValue(value) {
+      if (value == null || value === "") return "—";
+      if (Array.isArray(value)) {
+        return value.map(makeValue).join(", ");
+      }
+      if (isObject(value) && value.value != null) {
+        return value.value + (value.unit ? " " + value.unit : "");
+      }
+      if (typeof value == "object") return JSON.stringify(value);
+      return String(value);
+    }
+
+    function makeRows(key, value) {
+      if (isObject(value) && value.value == null && Object.keys(value).length > 0) {
+        var html = '<tr><th colspan="2" class="text-danger pt-4">' + clean(makeLabel(key)) + '</th></tr>';
+        var subKeys = Object.keys(value);
+        for (var j = 0; j < subKeys.length; j++) {
+          html += makeRows(subKeys[j], value[subKeys[j]]);
+        }
+        return html;
+      }
+      return `
+        <tr>
+          <th class="text-secondary w-25">` + clean(makeLabel(key)) + `</th>
+          <td>` + clean(makeValue(value)) + `</td>
+        </tr>
+      `;
+    }
+
+    const getGun = async () => {
+      elStatus.innerHTML = "Loading...";
+
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        var guns = Array.isArray(data) ? data : (Object.values(data).find(Array.isArray) || []);
+        var gun = guns.find(function (g) {
+          return getId(g) == id;
+        });
+
+        if (!gun) {
+          elStatus.innerHTML = "Gun not found.";
+          return;
+        }
+
+        elStatus.innerHTML = "";
+        document.title = getName(gun) + " | GUN LIBRARY";
+
+        var image = getImage(gun);
+        var picture = '<div class="d-flex align-items-center justify-content-center text-secondary">No image</div>';
+        if (image) {
+          picture = '<img class="object-fit-contain p-4" src="' + clean(image) + '" alt="' + clean(getName(gun)) + '">';
+        }
+
+        var rows = "";
+        var keys = Object.keys(gun);
+        for (var i = 0; i < keys.length; i++) {
+          if (skip.includes(keys[i])) continue;
+          rows += makeRows(keys[i], gun[keys[i]]);
+        }
+
+        elParent.innerHTML = `
+          <div class="col-md-5">
+            <div class="ratio ratio-4x3 bg-black border rounded">` + picture + `</div>
+          </div>
+          <div class="col-md-7">
+            <h1 class="display-5 fw-bold mb-3">` + clean(getName(gun)) + `</h1>
+            <table class="table">` + rows + `</table>
+          </div>
+        `;
+      } catch (err) {
+        elStatus.innerHTML = "Failed to load this gun: " + err.message;
+      }
+    }
+
+    if (id != null) {
+      getGun();
+    }
+  </script>
+</body>
+
+</html>

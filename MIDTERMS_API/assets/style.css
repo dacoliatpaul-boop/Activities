@@ -1,0 +1,51 @@
+[data-bs-theme="dark"] {
+    --bs-body-bg: #0a0a0a;
+    --bs-body-color: #f1f1f1;
+    --bs-border-color: #2b2b2b;
+    --bs-secondary-color: #a8a8a8;
+    --bs-danger: #e11d2e;
+    --bs-danger-rgb: 225, 29, 46;
+}
+
+body {
+    font-family: "Barlow", system-ui, sans-serif;
+}
+
+h1,
+h5,
+.brand {
+    font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.card {
+    --bs-card-bg: #131313;
+    transition: transform 0.15s, border-color 0.15s;
+}
+
+.gun:hover {
+    border-color: var(--bs-danger);
+    transform: translateY(-4px);
+}
+
+.name {
+    min-height: 2.3em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.btn-danger {
+    --bs-btn-bg: #e11d2e;
+    --bs-btn-border-color: #e11d2e;
+    --bs-btn-hover-bg: #b81422;
+    --bs-btn-hover-border-color: #b81422;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--bs-danger);
+    box-shadow: 0 0 0 0.2rem rgba(225, 29, 46, 0.25);
+}
